@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A.R.T.E.M.I.S. - Advanced Spoilage Detection System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #06010b;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Glow & Background FX */
+        .ambient-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 15%, rgba(138, 43, 226, 0.28) 0%, rgba(6, 1, 11, 0.98) 80%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Enhanced Navigation Bar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 6%;
+            background: rgba(10, 3, 20, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.25);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+        .brand:hover { transform: scale(1.02); }
+
+        .logo-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 18px rgba(255, 215, 0, 0.6);
+            object-fit: cover;
+        }
+
+        .logo-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #ffffff 0%, #ffe66d 40%, #ffd700 80%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4));
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 215, 0, 0.04);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            padding: 6px 24px;
+            border-radius: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #d8cceb;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: linear-gradient(90deg, #ffd700, #ffea85);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.7);
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+
+        .nav-action-btn {
+            background: linear-gradient(135deg, #ffe66d, #ffd700);
+            color: #06010b;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .nav-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+        }
+
+        /* Sections Structure */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8rem 6% 5% 6%;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Shiny Gold Title Utility */
+        .shiny-title {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #ffffff 0%, #fff1a8 30%, #ffd700 65%, #c59b27 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.35));
+            animation: shineGold 5s linear infinite;
+        }
+
+        @keyframes shineGold {
+            0% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+            100% { background-position: 0% center; }
+        }
+
+        /* 1. OVERVIEW SECTION */
+        #overview {
+            position: relative;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 4rem;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .overview-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            z-index: 2;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            color: #ffd700;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 8px 22px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.25);
+        }
+
+        h1 {
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            font-weight: 500;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .description {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #e5daf5;
+            font-weight: 300;
+            margin-bottom: 2.5rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .overview-highlights {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        .highlight-card {
+            background: rgba(25, 10, 48, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            padding: 1.4rem 1.6rem;
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .highlight-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 215, 0, 0.6);
+        }
+
+        .highlight-card h4 {
+            color: #ffd700;
+            font-size: 1.05rem;
+            margin-bottom: 0.4rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+        }
+
+        .highlight-card p {
+            color: #cbb8dc;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        /* Standalone Overview Deep-Dive Context Section */
+        .overview-details-box {
+            margin-top: 5rem;
+            background: rgba(20, 8, 38, 0.7);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+        }
+
+        .overview-details-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .detail-pillar h3 {
+            font-size: 1.2rem;
+            color: #ffd700;
+            margin-bottom: 0.8rem;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+        }
+
+        .detail-pillar p {
+            color: #d1c0e6;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        /* Right Side: Image Collage with Organic Mask */
+        .overview-visual {
+            position: relative;
+            width: 100%;
+            height: 520px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .collage-wrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            -webkit-mask-image: radial-gradient(circle at 60% 50%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 90%),
+                                linear-gradient(to left, rgba(0,0,0,1) 50%, rgba(0,0,0,0.2) 100%);
+            mask-image: radial-gradient(circle at 60% 50%, rgba(0,0,0,1) 45%, rgba(0,0,0,0) 90%);
+        }
+
+        .collage-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.9) contrast(1.15);
+            transform: scale(1.05);
+            transition: transform 0.6s ease;
+        }
+        .overview-visual:hover .collage-img { transform: scale(1.1); }
+
+        .collage-glow {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, rgba(138, 43, 226, 0.15) 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+        }
+
+        /* 2. DEVICE SECTION */
+        #device {
+            width: 100%;
+            max-width: 1350px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.12rem;
+            color: #cbb8dc;
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 650px;
+        }
+
+        .device-container {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 3.5rem;
+            align-items: center;
+            background: rgba(22, 8, 42, 0.75);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 28px;
+            padding: 3.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), inset 0 0 25px rgba(255, 215, 0, 0.08);
+            width: 100%;
+        }
+
+        .device-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .main-img-container {
+            width: 100%;
+            height: 380px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+        }
+
+        .main-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .main-img-container img:hover { transform: scale(1.03); }
+
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .thumb {
+            height: 95px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+
+        .thumb:hover, .thumb.active {
+            opacity: 1;
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .device-specs {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+
+        .spec-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid #ffd700;
+            padding: 1.3rem 1.6rem;
+            border-radius: 0 14px 14px 0;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        .spec-item:hover {
+            background: rgba(255, 215, 0, 0.08);
+            transform: translateX(6px);
+        }
+
+        .spec-item h4 {
+            color: #ffd700;
+            font-size: 1.12rem;
+            margin-bottom: 0.4rem;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+        }
+
+        .spec-item p {
+            color: #decff5;
+            font-size: 0.95rem;
+            line-height: 1.55;
+        }
+
+        /* 3. APPLICATIONS & DEPLOYMENT SECTION */
+        #applications {
+            width: 100%;
+            max-width: 1250px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+
+        .app-card {
+            background: rgba(22, 8, 42, 0.75);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            backdrop-filter: blur(15px);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .app-card.featured {
+            border-color: #ffd700;
+            background: rgba(35, 12, 70, 0.85);
+            box-shadow: 0 25px 50px rgba(255, 215, 0, 0.25);
+        }
+
+        .app-card:hover {
+            transform: translateY(-8px);
+            border-color: #ffd700;
+            box-shadow: 0 30px 60px rgba(255, 215, 0, 0.35);
+        }
+
+        .app-badge {
+            position: absolute;
+            top: -16px;
+            right: 30px;
+            background: linear-gradient(135deg, #ffd700, #ffea85);
+            color: #0b0314;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 6px 16px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .app-title {
+            font-size: 1.35rem;
+            color: #ffd700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+        }
+
+        .app-desc {
+            font-size: 0.92rem;
+            color: #cbb8dc;
+            margin-bottom: 2rem;
+            min-height: 45px;
+            line-height: 1.5;
+        }
+
+        .app-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+            margin-bottom: 2.5rem;
+            flex-grow: 1;
+        }
+
+        .app-features li {
+            font-size: 0.95rem;
+            color: #decff5;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .app-features li::before {
+            content: '✦';
+            color: #ffd700;
+            font-size: 0.9rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+        }
+
+        .app-btn {
+            background: transparent;
+            border: 2px solid #ffd700;
+            color: #ffd700;
+            padding: 13px;
+            border-radius: 30px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.15);
+        }
+
+        .app-card.featured .app-btn, .app-btn:hover {
+            background: linear-gradient(135deg, #ffe66d, #ffd700);
+            color: #0b0314;
+            border-color: #ffe66d;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+        }
+
+        /* 4. CONTACT SECTION (Enhanced with direct owner channels) */
+        #contact {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 3rem;
+            width: 100%;
+            background: rgba(22, 8, 42, 0.8);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 28px;
+            padding: 3.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+        }
+
+        .contact-info-side {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 2rem;
+            padding-right: 1.5rem;
+            border-right: 1px solid rgba(255, 215, 0, 0.15);
+        }
+
+        .channels-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .channel-card {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            padding: 1.1rem 1.3rem;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .channel-card:hover {
+            background: rgba(255, 215, 0, 0.08);
+            border-color: rgba(255, 215, 0, 0.5);
+            transform: translateX(5px);
+        }
+
+        .channel-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 215, 0, 0.12);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffd700;
+            font-size: 1.2rem;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        .channel-details span {
+            display: block;
+            font-size: 0.78rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #a996c4;
+            margin-bottom: 0.2rem;
+        }
+
+        .channel-details strong {
+            font-size: 0.95rem;
+            color: #ffffff;
+            font-weight: 500;
+            word-break: break-all;
+        }
+
+        .contact-form-side {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            background: rgba(12, 4, 24, 0.9);
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            border-radius: 14px;
+            padding: 1.05rem 1.2rem;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #ffe66d 0%, #ffd700 50%, #cca125 100%);
+            color: #06010b;
+            border: none;
+            padding: 1.1rem;
+            border-radius: 30px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 0.5rem;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.35);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(255, 215, 0, 0.6);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .overview-grid, .device-container, .overview-details-grid, .contact-layout {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            .contact-info-side {
+                padding-right: 0;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+                padding-bottom: 2rem;
+            }
+            .overview-visual { height: 350px; }
+            .device-container { padding: 2rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .nav-container { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow"></div>
+
+    <!-- Enhanced Navigation Bar -->
+    <nav>
+        <a href="#overview" class="brand">
+            <img src="ae2f8d36-212b-4c3c-92bc-5e2b0e216ed2.jfif" alt="Artemis Logo" class="logo-img">
+            <span class="logo-text">A.R.T.E.M.I.S.</span>
+        </a>
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#device">Device</a></li>
+                <li><a href="#applications">Applications</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+        <a href="#contact" class="nav-action-btn">Request Unit</a>
+    </nav>
+
+    <!-- 1. OVERVIEW SECTION -->
+    <section id="overview">
+        <div class="overview-grid">
+            <!-- Left Side: Overview Details -->
+            <div class="overview-content">
+                <div class="badge">SPOILAGE DETECTION SYSTEM</div>
+                <h1 class="shiny-title">A.R.T.E.M.I.S.</h1>
+                <p class="description">
+                    Advanced Rapid Thermal and E-Nose Method for Identifying Food Spoilage. Providing real-time, high-precision analysis to safeguard food freshness, eliminate operational guesswork, and maintain total supply chain integrity.
+                </p>
+                <div class="overview-highlights">
+                    <div class="highlight-card">
+                        <h4>Real-Time Analysis</h4>
+                        <p>Instantaneous readouts via multi-channel sensors.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <h4>Precision Payload</h4>
+                        <p>Thermal and volatile organic compound detection.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Collage Image with Curved Organic Fade Mask -->
+            <div class="overview-visual">
+                <div class="collage-glow"></div>
+                <div class="collage-wrapper">
+                    <img src="01bed024-6f7b-4feb-94a2-bfa22a4a946b.jfif" alt="A.R.T.E.M.I.S. Collage Overview" class="collage-img">
+                </div>
+            </div>
+        </div>
+
+        <!-- Standalone Overview Context / System Architecture Details -->
+        <div class="overview-details-box">
+            <h3 class="shiny-title" style="font-size: 1.8rem; margin-bottom: 0.5rem;">System Intelligence & Methodology</h3>
+            <p style="color: #cbb8dc; font-size: 1rem; max-width: 800px;">
+                Designed from the ground up for food safety specialists, A.R.T.E.M.I.S. bridges the gap between laboratory-grade chemical assays and rapid field deployment.
+            </p>
+            <div class="overview-details-grid">
+                <div class="detail-pillar">
+                    <h3>Volatile Fingerprinting</h3>
+                    <p>Detects parts-per-billion changes in microbial metabolites and spoilage gases long before organoleptic signs become apparent to human senses.</p>
+                </div>
+                <div class="detail-pillar">
+                    <h3>Thermal Mapping</h3>
+                    <p>Identifies micro-temperature fluctuations and exothermic decay pockets within packaging units and temperature-sensitive freight.</p>
+                </div>
+                <div class="detail-pillar">
+                    <h3>Chain Integrity</h3>
+                    <p>Integrates directly with enterprise logistics pipelines to log audit trails and prevent compromised batches from reaching consumer markets.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. DEVICE SECTION -->
+    <section id="device">
+        <h2 class="section-title shiny-title">The Hardware Unit</h2>
+        <p class="section-subtitle">Engineered with dual-stage multi-channel e-nose sensor arrays and high-precision thermal imaging pods housed in a reinforced chassis.</p>
+        
+        <div class="device-container">
+            <!-- Dynamic Image Preview Gallery -->
+            <div class="device-gallery">
+                <div class="main-img-container">
+                    <img id="mainImage" src="6129d737-c385-4fdc-8c6d-a4d2e8680bc8.jfif" alt="A.R.T.E.M.I.S. Device View">
+                </div>
+                <div class="thumbnail-grid">
+                    <div class="thumb active" onclick="changeImage('6129d737-c385-4fdc-8c6d-a4d2e8680bc8.jfif', this)">
+                        <img src="6129d737-c385-4fdc-8c6d-a4d2e8680bc8.jfif" alt="Angle View">
+                    </div>
+                    <div class="thumb" onclick="changeImage('03ffa2cd-b706-462d-a5c1-2211351b4357.jfif', this)">
+                        <img src="03ffa2cd-b706-462d-a5c1-2211351b4357.jfif" alt="Front Lighting View">
+                    </div>
+                    <div class="thumb" onclick="changeImage('f8188bf2-a91f-40a4-895f-3789e5805e44.jfif', this)">
+                        <img src="f8188bf2-a91f-40a4-895f-3789e5805e44.jfif" alt="Side Profile">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Device Specifications -->
+            <div class="device-specs">
+                <div class="spec-item">
+                    <h4>Thermal Scanning Chamber</h4>
+                    <p>Detects subtle temperature anomalies and heat signatures indicative of early-stage bacterial growth and decomposition.</p>
+                </div>
+                <div class="spec-item">
+                    <h4>Multi-Channel E-Nose Array</h4>
+                    <p>Sniffs volatile organic compounds (VOCs) and microbial metabolites with high specificity for instant freshness verification.</p>
+                </div>
+                <div class="spec-item">
+                    <h4>Ruggedized Enclosure</h4>
+                    <p>Built with gold-trimmed industrial plating, heavy-duty latches, and secure access ports optimized for field inspections.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. APPLICATIONS & DEPLOYMENT SECTION -->
+    <section id="applications">
+        <h2 class="section-title shiny-title">Deployment Sectors & Workflows</h2>
+        <p class="section-subtitle">Tailored operational configurations designed for commercial food safety, logistics hubs, and laboratory verification.</p>
+        
+        <div class="app-grid">
+            <!-- Sector 1 -->
+            <div class="app-card">
+                <div class="app-title">Commercial Kitchens</div>
+                <div class="app-desc">For independent restaurants, hospitality groups, and boutique food vendors.</div>
+                <ul class="app-features">
+                    <li>Daily intake freshness inspection</li>
+                    <li>Automated shelf-life tracking</li>
+                    <li>Compact benchtop unit design</li>
+                    <li>Local Bluetooth sync interface</li>
+                </ul>
+                <a href="#contact" class="app-btn">Explore Kitchen Setup</a>
+            </div>
+
+            <!-- Sector 2 (Featured) -->
+            <div class="app-card featured">
+                <div class="app-badge">High Demand</div>
+                <div class="app-title">Cold Chain Logistics</div>
+                <div class="app-desc">For distribution centers, transport fleets, and large-scale supply hubs.</div>
+                <ul class="app-features">
+                    <li>Real-time cloud analytics dashboard</li>
+                    <li>Automated multi-station batch alerts</li>
+                    <li>High-speed continuous conveyor scanning</li>
+                    <li>ERP & warehouse management integration</li>
+                </ul>
+                <a href="#contact" class="app-btn">Deploy Logistics Grid</a>
+            </div>
+
+            <!-- Sector 3 -->
+            <div class="app-card">
+                <div class="app-title">Food Science Labs</div>
+                <div class="app-desc">For specialized research facilities and rigorous quality control testing.</div>
+                <ul class="app-features">
+                    <li>Custom firmware & calibration profiles</li>
+                    <li>High-resolution VOC spectrum graphing</li>
+                    <li>Full raw data export & API access</li>
+                    <li>Dedicated applications engineer</li>
+                </ul>
+                <a href="#contact" class="app-btn">Request Lab Specs</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. CONTACT SECTION (With direct owner contact channels) -->
+    <section id="contact">
+        <div class="contact-layout">
+            <!-- Left Column: Owner Contact Channels -->
+            <div class="contact-info-side">
+                <div>
+                    <h2 class="section-title shiny-title" style="font-size: 2.2rem; text-align: left; margin-bottom: 0.5rem;">Connect Directly</h2>
+                    <p style="color: #cbb8dc; font-size: 0.95rem; line-height: 1.6;">
+                        Reach out to our leadership and support team instantly through our official channels. We are available 24/7 for operational inquiries.
+                    </p>
+                </div>
+                
+                <div class="channels-list">
+                    <!-- Email Channel -->
+                    <a href="mailto:support@artemis-spoilage.io" class="channel-card">
+                        <div class="channel-icon">✉</div>
+                        <div class="channel-details">
+                            <span>Official Email</span>
+                            <strong>support@artemis-spoilage.io</strong>
+                        </div>
+                    </a>
+
+                    <!-- Phone Number Channel -->
+                    <a href="tel:+18005552783" class="channel-card">
+                        <div class="channel-icon">📞</div>
+                        <div class="channel-details">
+                            <span>Direct Helpline</span>
+                            <strong>+1 (800) 555-2783</strong>
+                        </div>
+                    </a>
+
+                    <!-- Facebook Page Channel -->
+                    <a href="https://facebook.com/ArtemisSpoilageDetection" target="_blank" class="channel-card">
+                        <div class="channel-icon">f</div>
+                        <div class="channel-details">
+                            <span>Facebook Community</span>
+                            <strong>fb.com/ArtemisSpoilageDetection</strong>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Column: Dispatch Form -->
+            <div class="contact-form-side">
+                <h3 class="shiny-title" style="font-size: 1.5rem; margin-bottom: 0.3rem;">Send a Dispatch Message</h3>
+                <p style="color: #a996c4; font-size: 0.88rem; margin-bottom: 1rem;">Fill out the form below and our team will respond within 2 hours.</p>
+
+                <form class="contact-form" onsubmit="event.preventDefault(); alert('Thank you! Your message has been sent successfully.');">
+                    <div class="form-row">
+                        <input type="text" placeholder="Your Name" required>
+                        <input type="email" placeholder="Email Address" required>
+                    </div>
+                    <input type="text" placeholder="Company / Organization">
+                    <textarea placeholder="Describe your spoilage detection requirements..." required></textarea>
+                    <button type="submit" class="submit-btn">Send Dispatch Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function changeImage(imageSrc, thumbElement) {
+            document.getElementById('mainImage').src = imageSrc;
+            const thumbnails = document.querySelectorAll('.thumb');
+            thumbnails.forEach(t => t.classList.remove('active'));
+            thumbElement.classList.add('active');
+        }
+    </script>
+</body>
+</html>
