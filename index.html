@@ -581,7 +581,7 @@
             box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
         }
 
-        /* 4. CONTACT SECTION (Enhanced with direct owner channels) */
+        /* 4. CONTACT SECTION */
         #contact {
             width: 100%;
             max-width: 1200px;
@@ -786,7 +786,7 @@
                     </div>
                     <div class="highlight-card">
                         <h4>Precision Payload</h4>
-                        <p>Thermal and Carbon Dioxide detection.</p>
+                        <p>Thermal and volatile organic compound detection.</p>
                     </div>
                 </div>
             </div>
@@ -808,16 +808,16 @@
             </p>
             <div class="overview-details-grid">
                 <div class="detail-pillar">
-                    <h3>Carbon Dioxide Fingerprinting</h3>
-                    <p>Detects parts-per-million changes in microbial metabolites and spoilage gases long before organoleptic signs become apparent to human senses.</p>
+                    <h3>Volatile Fingerprinting</h3>
+                    <p>Detects parts-per-billion changes in microbial metabolites and spoilage gases long before organoleptic signs become apparent to human senses.</p>
                 </div>
                 <div class="detail-pillar">
                     <h3>Thermal Mapping</h3>
                     <p>Identifies micro-temperature fluctuations and exothermic decay pockets within packaging units and temperature-sensitive freight.</p>
                 </div>
                 <div class="detail-pillar">
-                    <h3>Accesibility to Different Sectors</h3>
-                    <p>The device can be used for Scientific/Medical Purposes, can be used by Business owners for quality detection of products, and can be used by normal consumers</p>
+                    <h3>Chain Integrity</h3>
+                    <p>Integrates directly with enterprise logistics pipelines to log audit trails and prevent compromised batches from reaching consumer markets.</p>
                 </div>
             </div>
         </div>
@@ -826,7 +826,7 @@
     <!-- 2. DEVICE SECTION -->
     <section id="device">
         <h2 class="section-title shiny-title">The Hardware Unit</h2>
-        <p class="section-subtitle">Engineered with dual-stage carbon dioxide e-nose sensor and high-precision temperature scanner housed in a reinforced casing.</p>
+        <p class="section-subtitle">Engineered with dual-stage multi-channel e-nose sensor arrays and high-precision thermal imaging pods housed in a reinforced chassis.</p>
         
         <div class="device-container">
             <!-- Dynamic Image Preview Gallery -->
@@ -855,11 +855,11 @@
                 </div>
                 <div class="spec-item">
                     <h4>Multi-Channel E-Nose Array</h4>
-                    <p>Sniffs Carbon Dioxide emission and microbial metabolites with high specificity for instant freshness verification.</p>
+                    <p>Sniffs volatile organic compounds (VOCs) and microbial metabolites with high specificity for instant freshness verification.</p>
                 </div>
                 <div class="spec-item">
-                    <h4>Multi-class Enclosure</h4>
-                    <p>Built with gold-trimmed industrial plating, magnetic latches, and secure access ports.</p>
+                    <h4>Ruggedized Enclosure</h4>
+                    <p>Built with gold-trimmed industrial plating, heavy-duty latches, and secure access ports optimized for field inspections.</p>
                 </div>
             </div>
         </div>
@@ -913,10 +913,10 @@
         </div>
     </section>
 
-    <!-- 4. CONTACT SECTION (With direct owner contact channels) -->
+    <!-- 4. CONTACT SECTION -->
     <section id="contact">
         <div class="contact-layout">
-            <!-- Left Column: Owner Contact Channels -->
+            <!-- Left Column: Direct Channels -->
             <div class="contact-info-side">
                 <div>
                     <h2 class="section-title shiny-title" style="font-size: 2.2rem; text-align: left; margin-bottom: 0.5rem;">Connect Directly</h2>
@@ -927,47 +927,50 @@
                 
                 <div class="channels-list">
                     <!-- Email Channel -->
-                    <a href="mailto:arabelawrence@gmail.com" class="channel-card">
+                    <a href="mailto:support@artemis-spoilage.io" class="channel-card">
                         <div class="channel-icon">✉</div>
                         <div class="channel-details">
                             <span>Official Email</span>
-                            <strong>arabelawrence@gmail.com</strong>
+                            <strong>support@artemis-spoilage.io</strong>
                         </div>
                     </a>
 
                     <!-- Phone Number Channel -->
-                    <a href="tel:09081266987" class="channel-card">
+                    <a href="tel:+18005552783" class="channel-card">
                         <div class="channel-icon">📞</div>
                         <div class="channel-details">
                             <span>Direct Helpline</span>
-                            <strong>09081266987</strong>
+                            <strong>+1 (800) 555-2783</strong>
                         </div>
                     </a>
 
-            <!-- Facebook Page Channel -->
-<a href="https://www.facebook.com/profile.php?id=61586836847872" class="contact-card">
-    <div class="channel-icon">
-        <span>f</span>
-    </div>
-    <div class="channel-details">
-        <span class="label">FACEBOOK COMMUNITY (A.R.T.E.M.I.S)</span>
-        <span class="value">A.R.T.E.M.I.S. FB Page</span>
-    </div>
-</a>
+                    <!-- Facebook Page Channel -->
+                    <a href="https://facebook.com/ArtemisSpoilageDetection" target="_blank" class="channel-card">
+                        <div class="channel-icon">f</div>
+                        <div class="channel-details">
+                            <span>Facebook Community</span>
+                            <strong>fb.com/ArtemisSpoilageDetection</strong>
+                        </div>
+                    </a>
+                </div>
+            </div>
 
-
-            <!-- Right Column: Dispatch Form -->
+            <!-- Right Column: Web3Forms Dispatch Form -->
             <div class="contact-form-side">
                 <h3 class="shiny-title" style="font-size: 1.5rem; margin-bottom: 0.3rem;">Send a Dispatch Message</h3>
                 <p style="color: #a996c4; font-size: 0.88rem; margin-bottom: 1rem;">Fill out the form below and our team will respond within 2 hours.</p>
 
-                <form class="contact-form" onsubmit="event.preventDefault(); alert('Thank you! Your message has been sent successfully.');">
+                <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+                    <!-- Replace YOUR_ACCESS_KEY_HERE with your Web3Forms key -->
+                    <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+
                     <div class="form-row">
-                        <input type="text" placeholder="Your Name" required>
-                        <input type="email" placeholder="Email Address" required>
+                        <input type="text" name="Name" placeholder="Your Name" required>
+                        <input type="email" name="Email" placeholder="Email Address" required>
                     </div>
-                    <input type="text" placeholder="Company / Organization">
-                    <textarea placeholder="Describe your spoilage detection requirements..." required></textarea>
+                    <input type="text" name="Company" placeholder="Company / Organization">
+                    <textarea name="Message" placeholder="Describe your spoilage detection requirements..." required></textarea>
+                    
                     <button type="submit" class="submit-btn">Send Dispatch Message</button>
                 </form>
             </div>
@@ -983,4 +986,4 @@
         }
     </script>
 </body>
-</html>
+</html>S
