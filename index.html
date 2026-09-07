@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>A.R.T.E.M.I.S. - Advanced Spoilage Detection System</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
     
@@ -50,6 +50,7 @@
             -webkit-backdrop-filter: blur(24px);
             border-bottom: 1px solid rgba(255, 215, 0, 0.25);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            gap: 10px;
         }
 
         .brand {
@@ -58,6 +59,7 @@
             gap: 14px;
             text-decoration: none;
             transition: transform 0.3s ease;
+            min-width: 0; /* Prevents flexbox from pushing it out */
         }
         .brand:hover { transform: scale(1.02); }
 
@@ -68,6 +70,7 @@
             border: 2px solid #ffd700;
             box-shadow: 0 0 18px rgba(255, 215, 0, 0.6);
             object-fit: cover;
+            flex-shrink: 0;
         }
 
         .logo-text {
@@ -78,6 +81,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4));
+            white-space: nowrap;
         }
 
         .nav-container {
@@ -137,10 +141,45 @@
             text-decoration: none;
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         .nav-action-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+        }
+
+        /* Mobile Hamburger Icon */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 28px;
+            height: 20px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+            padding: 0;
+            flex-shrink: 0;
+        }
+
+        .hamburger span {
+            width: 100%;
+            height: 2px;
+            background: #ffd700;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
         }
 
         /* Sections Structure */
@@ -213,7 +252,7 @@
         }
 
         h1 {
-            font-size: clamp(3rem, 6vw, 5.5rem);
+            font-size: clamp(2.8rem, 6vw, 5.5rem);
             font-weight: 500;
             line-height: 1.1;
             margin-bottom: 1.5rem;
@@ -295,7 +334,7 @@
             line-height: 1.6;
         }
 
-        /* Right Side: Image Collage with Organic Mask */
+        /* Right Side: Image Collage */
         .overview-visual {
             position: relative;
             width: 100%;
@@ -470,7 +509,7 @@
 
         .app-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2.5rem;
             width: 100%;
             margin-top: 1.5rem;
@@ -729,7 +768,7 @@
             box-shadow: 0 12px 30px rgba(255, 215, 0, 0.6);
         }
 
-        /* Responsive Breakpoints */
+        /* Responsive Breakpoints & Mobile Optimization */
         @media (max-width: 1024px) {
             .overview-grid, .device-container, .overview-details-grid, .contact-layout {
                 grid-template-columns: 1fr;
@@ -742,9 +781,153 @@
                 padding-bottom: 2rem;
             }
             .overview-visual { height: 350px; }
-            .device-container { padding: 2rem; }
+            .device-container { padding: 2.5rem; }
             .form-row { grid-template-columns: 1fr; }
-            .nav-container { display: none; }
+
+            /* Mobile Hamburger Navigation */
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-container {
+                position: fixed;
+                top: 68px;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 3, 20, 0.96);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border-radius: 0 0 24px 24px;
+                border: none;
+                border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+                padding: 1.8rem 0;
+                flex-direction: column;
+                transform: translateY(-150%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+            }
+
+            .nav-container.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+        }
+
+        /* Strict Mobile Adjustments for Crowded Displays */
+        @media (max-width: 768px) {
+            /* Fix Navigation Overlap */
+            nav {
+                padding: 0.8rem 4%;
+                gap: 8px;
+            }
+
+            .brand {
+                gap: 8px;
+            }
+
+            .logo-img {
+                width: 32px;
+                height: 32px;
+            }
+
+            .logo-text {
+                font-size: 0.85rem;
+                letter-spacing: 1.5px;
+            }
+
+            .nav-action-btn {
+                padding: 6px 12px;
+                font-size: 0.65rem;
+            }
+
+            .hamburger {
+                width: 24px;
+            }
+
+            /* Adjust Spacing and Typography */
+            section {
+                min-height: auto;
+                padding: 6.5rem 5% 3rem 5%;
+            }
+
+            h1 {
+                font-size: 2rem !important; 
+                line-height: 1.2;
+                margin-bottom: 1rem;
+            }
+
+            .badge {
+                font-size: 0.65rem;
+                padding: 6px 14px;
+                letter-spacing: 3px;
+                margin-bottom: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .section-subtitle, .description {
+                font-size: 0.95rem;
+                margin-bottom: 2rem;
+                line-height: 1.6;
+            }
+
+            /* Reorder Layout: Image Top, Text Bottom */
+            .overview-grid {
+                display: flex;
+                flex-direction: column-reverse;
+                gap: 2rem;
+                margin-top: 1rem;
+            }
+
+            .overview-visual {
+                height: 280px;
+                width: 100%;
+            }
+
+            .overview-highlights {
+                grid-template-columns: 1fr;
+            }
+
+            .overview-details-box,
+            .device-container,
+            .contact-layout,
+            .app-card {
+                padding: 1.5rem;
+                border-radius: 18px;
+            }
+
+            .overview-details-box {
+                margin-top: 2rem;
+            }
+
+            .main-img-container {
+                height: 240px;
+            }
+
+            .thumb {
+                height: 65px;
+            }
+        }
+        
+        /* Ultra Small Mobile Screens */
+        @media (max-width: 400px) {
+            .nav-action-btn {
+                display: none; /* Hide button on extremely small screens to save space */
+            }
+            .logo-text {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -758,7 +941,9 @@
             <img src="ae2f8d36-212b-4c3c-92bc-5e2b0e216ed2.jfif" alt="Artemis Logo" class="logo-img">
             <span class="logo-text">A.R.T.E.M.I.S.</span>
         </a>
-        <div class="nav-container">
+
+        <!-- Navigation Links Dropdown -->
+        <div class="nav-container" id="navContainer">
             <ul class="nav-links">
                 <li><a href="#overview">Overview</a></li>
                 <li><a href="#device">Device</a></li>
@@ -766,7 +951,15 @@
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </div>
+
         <a href="#contact" class="nav-action-btn">Request Unit</a>
+
+        <!-- Hamburger Icon Button for Mobile -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle Navigation Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
 
     <!-- 1. OVERVIEW SECTION -->
@@ -976,12 +1169,31 @@
     </section>
 
     <script>
+        // Gallery Thumbnail Switcher
         function changeImage(imageSrc, thumbElement) {
             document.getElementById('mainImage').src = imageSrc;
             const thumbnails = document.querySelectorAll('.thumb');
             thumbnails.forEach(t => t.classList.remove('active'));
             thumbElement.classList.add('active');
         }
+
+        // Mobile Navigation Toggle
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const navContainer = document.getElementById('navContainer');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerBtn.classList.toggle('active');
+            navContainer.classList.toggle('active');
+        });
+
+        // Close navigation overlay when a link is clicked
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburgerBtn.classList.remove('active');
+                navContainer.classList.remove('active');
+            });
+        });
     </script>
 </body>
-</html>   
+</html>
